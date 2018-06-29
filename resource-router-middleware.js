@@ -1,6 +1,6 @@
 var Router = require('express').Router;
 
-var keyed = ['get', 'read', 'put', 'update', 'patch', 'modify', 'del', 'delete'],
+var keyed = ['get', 'read', 'put', 'patch', 'update', 'del', 'delete'],
 	map = { index:'get', list:'get', read:'get', create:'post', update:'put', modify:'patch' };
 
 module.exports = function ResourceRouter(route) {
@@ -24,7 +24,9 @@ module.exports = function ResourceRouter(route) {
 		fn = map[key] || key;
 		if (typeof router[fn]==='function') {
 			url = ~keyed.indexOf(key) ? ('/:'+route.id) : '/';
-			router[fn](url, route[key]);
+			var controller = route[key].controller ? route[key].controller : route[key];
+			var middleware = route[key].middleware ? route[key].middleware : [];
+			router[fn](url, middleware, controller);
 		}
 	}
 
