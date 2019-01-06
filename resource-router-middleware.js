@@ -23,7 +23,7 @@ module.exports = function ResourceRouter(route) {
 	for (key in route) {
 		fn = map[key] || key;
 		if (typeof router[fn]==='function') {
-			url = ~keyed.indexOf(key) ? ('/:'+route.id) : '/';
+			url = ~keyed.indexOf(key) && route.id ? ('/:'+route.id) : '/';
 			router[fn](url, route[key]);
 		}
 	}
